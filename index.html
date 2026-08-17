@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RaoSab Hub | 50+ Apps</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; height: 100vh; background: #0e1117; color: #ffffff; }
+    
+    /* Sidebar Layout */
+    #sidebar { width: 320px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; height: 100vh; }
+    .header { padding: 16px; border-bottom: 1px solid #30363d; }
+    .header h1 { font-size: 1.2rem; color: #ff4b4b; margin-bottom: 8px; }
+    .search-box { width: 100%; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 6px; }
+    
+    .app-list { flex: 1; overflow-y: auto; padding: 12px; }
+    .category-title { font-size: 0.75rem; text-transform: uppercase; color: #8b949e; margin: 16px 0 8px 4px; font-weight: bold; }
+    .app-btn { display: block; width: 100%; text-align: left; padding: 8px 12px; margin-bottom: 4px; background: transparent; border: none; color: #c9d1d9; border-radius: 6px; cursor: pointer; font-size: 0.9rem; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+    .app-btn:hover { background: #21262d; color: #fff; }
+    .app-btn.active { background: #ff4b4b; color: #fff; font-weight: bold; }
+    
+    /* Main Content / Iframe */
+    #main-content { flex: 1; height: 100vh; position: relative; background: #0e1117; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+
+  <div id="sidebar">
+    <div class="header">
+      <h1>RaoSab App Portal</h1>
+      <input type="text" id="search" class="search-box" placeholder="Search 50 apps..." onkeyup="filterApps()">
+    </div>
+    <div class="app-list" id="appList"></div>
+  </div>
+
+  <div id="main-content">
+    <iframe id="appViewer" src="https://fibretracement.streamlit.app/?embed=true"></iframe>
+  </div>
+
+  <script>
+    const appsData = [
+      {
+        category: "Astro & Cycles",
+        apps: [
+          { name: "Fibre Tracement", url: "https://fibretracement.streamlit.app" },
+          { name: "Birth Charts", url: "https://birthcharts.streamlit.app" },
+          { name: "Aspect Filter", url: "https://aspectfilter.streamlit.app" },
+          { name: "All Cycles", url: "https://allcycles.streamlit.app" },
+          { name: "Stock Scanner Aspect", url: "https://stock-scanner-ascpect.streamlit.app" },
+          { name: "Nakshtra", url: "https://nakshtra.streamlit.app" },
+          { name: "FnO Price Cycle", url: "https://fnopricecycle.streamlit.app" },
+          { name: "Gann Cycle", url: "https://ganncycle.streamlit.app" },
+          { name: "Nifty Time Cycle", url: "https://niftytimecycle.streamlit.app" },
+          { name: "Geo Trader", url: "https://geotrader.streamlit.app" },
+          { name: "Astro Samadhan", url: "https://astrosamadhan.streamlit.app" },
+          { name: "Lal Kitab", url: "https://lalkitab.streamlit.app" },
+          { name: "Live Planet Position", url: "https://liveplanetpostion.streamlit.app" },
+          { name: "Sun Cycle", url: "https://suncycle.streamlit.app" }
+        ]
+      },
+      {
+        category: "Options & F&O Analytics",
+        apps: [
+          { name: "FnO Reversal Point", url: "https://fnoreversalpnt.streamlit.app" },
+          { name: "Gamma Scan 1", url: "https://gammascan.streamlit.app" },
+          { name: "Gamma Scan 2", url: "https://gammascan1.streamlit.app" },
+          { name: "Option Chain Gaurav", url: "https://optionchainbygaurav.streamlit.app" },
+          { name: "OI Gaurav", url: "https://oiwithgaurav.streamlit.app" },
+          { name: "OI GSY", url: "https://oiwithgsy.streamlit.app" },
+          { name: "OI Decay", url: "https://oidecay.streamlit.app" },
+          { name: "FnO Backtesting", url: "https://fnobacktesting.streamlit.app" }
+        ]
+      },
+      {
+        category: "Live Market & Scanners",
+        apps: [
+          { name: "FII DII Data", url: "https://fiidii.streamlit.app" },
+          { name: "Intraday Reversal", url: "https://intradayreversal.streamlit.app" },
+          { name: "Last Traded Price", url: "https://lasttradedprice.streamlit.app" },
+          { name: "Nifty Live GS", url: "https://niftylivebygs.streamlit.app" },
+          { name: "Nubra LTP", url: "https://nubraltp.streamlit.app" },
+          { name: "Market Depth GS", url: "https://marketdepthgs.streamlit.app" },
+          { name: "Orderbook Track", url: "https://orderbooktrack.streamlit.app" },
+          { name: "Screeners App", url: "https://screenersapp.streamlit.app" }
+        ]
+      },
+      {
+        category: "Technical & Fundamentals",
+        apps: [
+          { name: "Fundamental GS", url: "https://fundamentalgs.streamlit.app" },
+          { name: "MFH Analysis 1", url: "https://mfhanalysis.streamlit.app" },
+          { name: "MFH Analysis 2", url: "https://mfhanalysis2.streamlit.app" },
+          { name: "Dow Theory", url: "https://dowtheory.streamlit.app" },
+          { name: "Sector Analysis", url: "https://sectoranalysis.streamlit.app" },
+          { name: "Tech Funda", url: "https://techfunda.streamlit.app" },
+          { name: "Technical GS", url: "https://technicalgs.streamlit.app" }
+        ]
+      },
+      {
+        category: "News & Tools",
+        apps: [
+          { name: "Backtest 111", url: "https://backtest111.streamlit.app" },
+          { name: "All News", url: "https://allnews.streamlit.app" },
+          { name: "One India News", url: "https://oneindianews.streamlit.app" },
+          { name: "Trading Journal GS", url: "https://tradingjournalgs.streamlit.app" }
+        ]
+      },
+      {
+        category: "Utilities & Weather",
+        apps: [
+          { name: "Master Data GS", url: "https://masterdatags.streamlit.app" },
+          { name: "GS World 1", url: "https://gsworld.streamlit.app" },
+          { name: "GS World 2", url: "https://gsworld1.streamlit.app" },
+          { name: "GS Library", url: "https://gslibrary.streamlit.app" },
+          { name: "Backup Multi", url: "https://backupmulti.streamlit.app" },
+          { name: "Multis", url: "https://multis.streamlit.app" },
+          { name: "Contact App", url: "https://8003994518.streamlit.app" },
+          { name: "Rulebook 24", url: "https://rulebook24.streamlit.app" },
+          { name: "RB 1122", url: "https://rb1122.streamlit.app" },
+          { name: "Sec Sea", url: "https://secsea.streamlit.app" },
+          { name: "Rao Saab App", url: "https://raosaab.streamlit.app" },
+          { name: "USA Weather", url: "https://usaweather.streamlit.app" },
+          { name: "USA Weather 1", url: "https://usaweather1.streamlit.app" },
+          { name: "USA Weather 2", url: "https://usaweather2.streamlit.app" },
+          { name: "USA Weather 3", url: "https://usaweather3.streamlit.app" },
+          { name: "USA Weather 4", url: "https://usaweather4.streamlit.app" }
+        ]
+      }
+    ];
+
+    const appListContainer = document.getElementById('appList');
+    const iframe = document.getElementById('appViewer');
+
+    function renderList() {
+      appListContainer.innerHTML = '';
+      appsData.forEach((group, gIdx) => {
+        const catDiv = document.createElement('div');
+        catDiv.className = 'category-group';
+        catDiv.innerHTML = `<div class="category-title">${group.category}</div>`;
+        
+        group.apps.forEach((app, aIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'app-btn';
+          if(gIdx === 0 && aIdx === 0) btn.classList.add('active');
+          btn.textContent = app.name;
+          btn.onclick = () => loadApp(app.url, btn);
+          catDiv.appendChild(btn);
+        });
+        appListContainer.appendChild(catDiv);
+      });
+    }
+
+    function loadApp(url, targetBtn) {
+      document.querySelectorAll('.app-btn').forEach(b => b.classList.remove('active'));
+      targetBtn.classList.add('active');
+      iframe.src = `${url}/?embed=true`;
+    }
+
+    function filterApps() {
+      const q = document.getElementById('search').value.toLowerCase();
+      document.querySelectorAll('.app-btn').forEach(btn => {
+        const match = btn.textContent.toLowerCase().includes(q);
+        btn.style.display = match ? 'block' : 'none';
+      });
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
